@@ -28,7 +28,7 @@ body {
 .login-container {
   position: absolute;
   width: 448px;
-  height: 500px;
+  height: 550px;
   left: 50%;
   top: 150px;
   transform: translateX(-50%);
@@ -127,3 +127,130 @@ body {
   line-height: 19px;
   cursor: pointer;
 }
+
+.signup-option {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.signup-option p {
+  font-size: 14px;
+  color: #525252;
+  margin-bottom: 10px;
+}
+
+.btn-signup {
+  display: inline-block;
+  width: 100%;
+  height: 40px;
+  background: #FFFFFF;
+  border: 1px solid #262626;
+  border-radius: 6px;
+  color: #262626;
+  font-size: 16px;
+  line-height: 40px;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Farmer Application Styles */
+.farmer-application-container {
+  position: absolute;
+  width: 448px;
+  left: 50%;
+  top: 150px;
+  transform: translateX(-50%);
+  background: #FFFFFF;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1), 0px 10px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 32px;
+}
+
+.farmer-application-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.farmer-application-header svg {
+  margin-bottom: 17px;
+}
+
+.farmer-application-header h1 {
+  font-size: 24px;
+  line-height: 24px;
+  color: #262626;
+  margin-bottom: 12px;
+  font-weight: 400;
+}
+
+.farmer-application-header p {
+  font-size: 16px;
+  line-height: 16px;
+  color: #525252;
+  font-weight: 400;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.file-upload-area {
+  border: 2px dashed #D4D4D4;
+  border-radius: 6px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.file-upload-content svg {
+  margin-bottom: 8px;
+}
+
+.file-upload-label {
+  display: block;
+  font-size: 14px;
+  line-height: 17px;
+  color: #404040;
+  margin-bottom: 4px;
+}
+
+.file-upload-info {
+  font-size: 12px;
+  line-height: 15px;
+  color: #525252;
+}
+
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.terms-checkbox input {
+  margin-right: 8px;
+}
+
+.terms-checkbox label {
+  font-size: 14px;
+  line-height: 17px;
+  color: #525252;
+}
+
+.btn-submit {
+  width: 100%;
+  height: 40px;
+  background: #262626;
+  border-radius: 6px;
+  border: none;
+  color: #FFFFFF;
+  font-size: 16px;
+  line-height: 19px;
+  cursor: pointer;
+}
+

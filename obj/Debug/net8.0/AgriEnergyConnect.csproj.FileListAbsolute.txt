@@ -28,3 +28,4 @@
 /Users/lukepetzer/University/3rd Year/PROG7311/LukePetzer-ST10298850-PROG7311-POE-Part2/AgriEnergyConnect/obj/Debug/net8.0/AgriEnergyConnect.pdb
 /Users/lukepetzer/University/3rd Year/PROG7311/LukePetzer-ST10298850-PROG7311-POE-Part2/AgriEnergyConnect/obj/Debug/net8.0/AgriEnergyConnect.genruntimeconfig.cache
 /Users/lukepetzer/University/3rd Year/PROG7311/LukePetzer-ST10298850-PROG7311-POE-Part2/AgriEnergyConnect/obj/Debug/net8.0/ref/AgriEnergyConnect.dll
+/Users/lukepetzer/University/3rd Year/PROG7311/LukePetzer-ST10298850-PROG7311-POE-Part2/AgriEnergyConnect/obj/Debug/net8.0/AgriEnergyConnect.sourcelink.json
