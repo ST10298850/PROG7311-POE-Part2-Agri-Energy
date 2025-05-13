@@ -23,14 +23,7 @@ namespace AgriEnergyConnect.Data
                 .WithOne(ud => ud.User)
                 .HasForeignKey<UserDetail>(ud => ud.UserID);
 
-            // User - FarmerApplications (One-to-Many)
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.FarmerApplications)
-                .WithOne(fa => fa.User)
-                .HasForeignKey(fa => fa.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // ✅ This is critical: explicitly define Farm → User
+            // Farm - User (Many-to-One)
             modelBuilder.Entity<Farm>()
                 .HasOne(f => f.User)
                 .WithMany(u => u.Farms)
@@ -44,6 +37,8 @@ namespace AgriEnergyConnect.Data
                 .WithOne(p => p.Farm)
                 .HasForeignKey(p => p.FarmID)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Ensure there's no configuration for FarmerApplication
         }
     }
 }

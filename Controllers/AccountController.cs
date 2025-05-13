@@ -4,6 +4,7 @@ using AgriEnergyConnect.ViewModels;
 using AgriEnergyConnect.Services;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using AgriEnergyConnect.Data;
 
 namespace AgriEnergyConnect.Controllers
 {
@@ -12,13 +13,20 @@ namespace AgriEnergyConnect.Controllers
         private readonly IUserService _userService;
         private readonly SignInManager<User> _signInManager;
 
-        public AccountController(IUserService userService, SignInManager<User> signInManager)
+        private readonly AppDbContext _context;
+
+        public AccountController(IUserService userService, SignInManager<User> signInManager, AppDbContext context)
         {
             _userService = userService;
             _signInManager = signInManager;
+            _context = context;
         }
-
-        // GET: /Account/Login
+        /// <summary>
+        /// Displays the login page for user authentication.
+        /// </summary>
+        /// <returns>
+        /// Returns an IActionResult that renders the login view.
+        /// </returns>
         public IActionResult Login()
         {
             return View();
@@ -67,34 +75,38 @@ namespace AgriEnergyConnect.Controllers
         }
 
         // POST: /Account/Application
-        // [HttpPost]
-        // public async Task<IActionResult> Application(FarmerApplicationViewModel model)
-        // {
-        //     if (!ModelState.IsValid)
-        //         return View(model);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Application(FarmerApplicationViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
 
-        //     // Process the farmer application
-        //     var result = await _userService.ProcessFarmerApplicationAsync(model);
+            // var userId = HttpContext.Session.GetString("UserID");
 
-        //     if (result.Succeeded)
-        //     {
-        //         // Redirect to a success page or login page
-        //         return RedirectToAction("ApplicationSuccess");
-        //     }
+            var application = new FarmerApplication
+            {
+                FarmName = model.FarmName,
+                Location = model.Location,
+                FarmType = model.FarmType,
+                FullName = model.FullName,
+                Email = model.Email,
+                Phone = model.Phone,
+                SubmissionDate = DateTime.Now,
+                Status = "Pending",
 
-        //     // If there are errors, add them to ModelState
-        //     foreach (var error in result.Errors)
-        //     {
-        //         ModelState.AddModelError("", error);
-        //     }
+            };
 
-        //     return View(model);
-        // }
+            _context.FarmerApplications.Add(application);
+            await _context.SaveChangesAsync();
 
-        // // GET: /Account/ApplicationSuccess
-        // public IActionResult ApplicationSuccess()
-        // {
-        //     return View();
-        // }
+            return RedirectToAction("ApplicationSuccess");
+        }
+
+        // GET: /Account/ApplicationSuccess
+        public IActionResult ApplicationSuccess()
+        {
+            return View();
+        }
     }
 }

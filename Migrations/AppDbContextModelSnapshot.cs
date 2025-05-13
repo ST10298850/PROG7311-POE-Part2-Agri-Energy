@@ -92,13 +92,7 @@ namespace AgriEnergyConnect.Migrations
                     b.Property<DateTime>("SubmissionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("ApplicationID");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("FarmerApplications");
                 });
@@ -384,17 +378,6 @@ namespace AgriEnergyConnect.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AgriEnergyConnect.Models.FarmerApplication", b =>
-                {
-                    b.HasOne("AgriEnergyConnect.Models.User", "User")
-                        .WithMany("FarmerApplications")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("AgriEnergyConnect.Models.Product", b =>
                 {
                     b.HasOne("AgriEnergyConnect.Models.Farm", "Farm")
@@ -475,8 +458,6 @@ namespace AgriEnergyConnect.Migrations
 
             modelBuilder.Entity("AgriEnergyConnect.Models.User", b =>
                 {
-                    b.Navigation("FarmerApplications");
-
                     b.Navigation("Farms");
 
                     b.Navigation("UserDetail");

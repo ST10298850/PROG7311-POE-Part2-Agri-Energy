@@ -17,6 +17,6 @@ public class User : IdentityUser
 
     // Navigation properties
     public UserDetail? UserDetail { get; set; }
-    public ICollection<FarmerApplication> FarmerApplications { get; set; } = new List<FarmerApplication>();
+
     public ICollection<Farm> Farms { get; set; } = new List<Farm>();
 }

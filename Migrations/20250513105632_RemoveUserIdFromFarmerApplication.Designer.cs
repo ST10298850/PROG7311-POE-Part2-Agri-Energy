@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgriEnergyConnect.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250512145557_FinalFix_FarmUserRelation")]
-    partial class FinalFix_FarmUserRelation
+    [Migration("20250513105632_RemoveUserIdFromFarmerApplication")]
+    partial class RemoveUserIdFromFarmerApplication
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,13 +95,7 @@ namespace AgriEnergyConnect.Migrations
                     b.Property<DateTime>("SubmissionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("ApplicationID");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("FarmerApplications");
                 });
@@ -387,17 +381,6 @@ namespace AgriEnergyConnect.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AgriEnergyConnect.Models.FarmerApplication", b =>
-                {
-                    b.HasOne("AgriEnergyConnect.Models.User", "User")
-                        .WithMany("FarmerApplications")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("AgriEnergyConnect.Models.Product", b =>
                 {
                     b.HasOne("AgriEnergyConnect.Models.Farm", "Farm")
@@ -478,8 +461,6 @@ namespace AgriEnergyConnect.Migrations
 
             modelBuilder.Entity("AgriEnergyConnect.Models.User", b =>
                 {
-                    b.Navigation("FarmerApplications");
-
                     b.Navigation("Farms");
 
                     b.Navigation("UserDetail");
