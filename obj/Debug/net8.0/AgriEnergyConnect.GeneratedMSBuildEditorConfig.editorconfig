@@ -18,8 +18,20 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /Users/lukepetzer/University/3rd Year/PROG7311/LukePetzer-ST10298850-PROG7311-POE-Part2/AgriEnergyConnect
 build_property._RazorSourceGeneratorDebug = 
 
-[/Users/lukepetzer/University/3rd Year/PROG7311/LukePetzer-ST10298850-PROG7311-POE-Part2/AgriEnergyConnect/Views/Application/Application.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXBwbGljYXRpb24vQXBwbGljYXRpb24uY3NodG1s
+[/Users/lukepetzer/University/3rd Year/PROG7311/LukePetzer-ST10298850-PROG7311-POE-Part2/AgriEnergyConnect/Views/Account/Application.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9BcHBsaWNhdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/lukepetzer/University/3rd Year/PROG7311/LukePetzer-ST10298850-PROG7311-POE-Part2/AgriEnergyConnect/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Mb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/lukepetzer/University/3rd Year/PROG7311/LukePetzer-ST10298850-PROG7311-POE-Part2/AgriEnergyConnect/Views/Employee/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRW1wbG95ZWUvRGFzaGJvYXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/lukepetzer/University/3rd Year/PROG7311/LukePetzer-ST10298850-PROG7311-POE-Part2/AgriEnergyConnect/Views/Farmer/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRmFybWVyL0Rhc2hib2FyZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/lukepetzer/University/3rd Year/PROG7311/LukePetzer-ST10298850-PROG7311-POE-Part2/AgriEnergyConnect/Views/Home/Index.cshtml]
