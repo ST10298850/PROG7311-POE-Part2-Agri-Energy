@@ -100,13 +100,21 @@ namespace AgriEnergyConnect.Controllers
             _context.FarmerApplications.Add(application);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ApplicationSuccess");
+            return RedirectToAction("Login", "Account"); // Redirect to login page
         }
 
         // GET: /Account/ApplicationSuccess
         public IActionResult ApplicationSuccess()
         {
             return View();
+        }
+
+        // GET: /Account/Logout
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();         // ASP.NET Identity logout
+            HttpContext.Session.Clear();                 // Clear session variables
+            return RedirectToAction("Login", "Account"); // Redirect to login page
         }
     }
 }
