@@ -137,5 +137,6 @@ namespace AgriEnergyConnect.Services
             // Use the repository to submit the application
             return await _repository.SubmitApplicationAsync(application);
         }
+
     }
 }

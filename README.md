@@ -74,26 +74,31 @@ The platform bridges the gap between agriculture and renewable energy. It stream
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/your-username/AgriEnergyConnect.git
-   cd AgriEnergyConnect
+   git clone
    ```
 
-   1. Use Get-Packages and intall;
-      ```
-      Install-Package Microsoft.EntityFrameworkCore.Tools -Version 8.0.16
-      ```
-   2. Then use Update-Database in Package Console Manager
-   3. Dotnet Run
+https://github.com/ST10298850/PROG7311-POE-Part2-Agri-Energy.git
+
+cd AgriEnergyConnect
+
+````
+
+1. Use Get-Packages and intall;
+   ```
+   Install-Package Microsoft.EntityFrameworkCore.Tools -Version 8.0.16
+   ```
+2. Then use Update-Database in Package Console Manager
+3. Dotnet Run
 
 2. **Open the solution in Visual Studio.**
 
 3. **Set up the database connection in `appsettings.json`:**
 
-   ```json
-   "ConnectionStrings": {
-     "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=AgriEnergyConnectDb;Trusted_Connection=True;MultipleActiveResultSets=true"
-   }
-   ```
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=AgriEnergyConnectDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+}
+````
 
 4. **Open the Package Manager Console** (in Visual Studio):
 
