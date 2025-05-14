@@ -3,6 +3,8 @@ using AgriEnergyConnect.Models;
 using AgriEnergyConnect.Data;
 using Microsoft.EntityFrameworkCore;
 using AgriEnergyConnect.Services;
+using Microsoft.AspNetCore.Identity;
+using AppUser = AgriEnergyConnect.Models.User;
 
 namespace AgriEnergyConnect.Controllers
 {
@@ -13,18 +15,51 @@ namespace AgriEnergyConnect.Controllers
 
         private readonly IProductService _productService;
 
-        public EmployeeController(AppDbContext context, IApplicationService applicationService, IProductService productService)
+        private readonly UserManager<AppUser> _userManager;
+
+        public EmployeeController(AppDbContext context, IApplicationService applicationService, IProductService productService, UserManager<AppUser> userManager)
         {
             _context = context;
             _applicationService = applicationService;
             _productService = productService;
+            _userManager = userManager;
         }
 
         // GET: EmployeeController
-        public async Task<ActionResult> Dashboard()
+        [HttpGet]
+        public async Task<IActionResult> Dashboard(string? userId, string? category, DateTime? startDate, DateTime? endDate)
         {
-            var products = await _productService.GetAllProductsAsync();
-            return View(products);
+            var query = _context.Products
+                .Include(p => p.Farm)
+                .Include(p => p.User)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(userId))
+                query = query.Where(p => p.UserId == userId);
+
+            if (!string.IsNullOrEmpty(category))
+                query = query.Where(p => p.Category == category);
+
+            if (startDate.HasValue)
+                query = query.Where(p => p.ProductionDate >= startDate.Value);
+
+            if (endDate.HasValue)
+                query = query.Where(p => p.ProductionDate <= endDate.Value);
+
+            var products = await query.ToListAsync();
+
+            var viewModel = new ProductFilterViewModel
+            {
+                Products = products,
+                Categories = await _context.Products.Select(p => p.Category).Distinct().ToListAsync(),
+                Farmers = (await _userManager.GetUsersInRoleAsync("Farmer")).ToList(),
+                UserId = userId,
+                Category = category,
+                StartDate = startDate,
+                EndDate = endDate
+            };
+
+            return View(viewModel);
         }
 
         public async Task<ActionResult> ManageApplications()
