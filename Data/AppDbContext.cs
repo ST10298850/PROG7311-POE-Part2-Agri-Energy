@@ -38,7 +38,13 @@ namespace AgriEnergyConnect.Data
                 .HasForeignKey(p => p.FarmID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Ensure there's no configuration for FarmerApplication
+            // New: User - Product (One-to-Many)
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Products)
+                .WithOne(p => p.User)
+                .HasForeignKey(p => p.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict); // Optional: Avoid circular cascade issues
         }
     }
 }

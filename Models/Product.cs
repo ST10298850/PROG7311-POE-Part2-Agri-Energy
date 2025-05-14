@@ -22,5 +22,12 @@ public class Product
 
     public string Description { get; set; }
 
+    // New: Reference to the farmer (User)
+    [Required]
+    [ForeignKey("User")]
+    public string UserId { get; set; }
+
+    public User User { get; set; }
+
     public Farm Farm { get; set; }
 }

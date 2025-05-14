@@ -11,16 +11,20 @@ namespace AgriEnergyConnect.Controllers
         private readonly AppDbContext _context;
         private readonly IApplicationService _applicationService;
 
-        public EmployeeController(AppDbContext context, IApplicationService applicationService)
+        private readonly IProductService _productService;
+
+        public EmployeeController(AppDbContext context, IApplicationService applicationService, IProductService productService)
         {
             _context = context;
             _applicationService = applicationService;
+            _productService = productService;
         }
 
         // GET: EmployeeController
-        public ActionResult Dashboard()
+        public async Task<ActionResult> Dashboard()
         {
-            return View();
+            var products = await _productService.GetAllProductsAsync();
+            return View(products);
         }
 
         public async Task<ActionResult> ManageApplications()
@@ -38,6 +42,12 @@ namespace AgriEnergyConnect.Controllers
 
             var updatedApplication = await _context.FarmerApplications.FindAsync(id);
             return Json(new { success = true, message = "Status updated successfully", newStatus = updatedApplication.Status });
+        }
+
+        public async Task<IActionResult> ViewAllProducts()
+        {
+            var products = await _productService.GetAllProductsAsync();
+            return View(products);
         }
     }
 }

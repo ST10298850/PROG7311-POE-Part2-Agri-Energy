@@ -19,4 +19,6 @@ public class User : IdentityUser
     public UserDetail? UserDetail { get; set; }
 
     public ICollection<Farm> Farms { get; set; } = new List<Farm>();
+
+    public ICollection<Product> Products { get; set; } = new List<Product>();
 }
