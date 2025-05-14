@@ -18,35 +18,38 @@
             </tr>
         </thead>
         <tbody>
-        @foreach (var app in Model)
-        {
-            <tr id="application-@app.ApplicationID">
-                <td>@app.ApplicationID</td>
-                <td>@app.FarmName</td>
-                <td>@app.Location</td>
-                <td>@app.FarmType</td>
-                <td>@app.FullName</td>
-                <td>@app.Email</td>
-                <td>@app.Phone</td>
-                <td>@app.SubmissionDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                <td>
-                    <span class="badge @(app.Status == "Pending" ? "bg-warning" : (app.Status == "Approved" ? "bg-success" : "bg-danger"))">
-                        @app.Status
-                    </span>
-                </td>
-                <td>
-                    @if (app.Status == "Pending")
-                    {
-                        <button onclick="updateStatus(@app.ApplicationID, 'Approved')" class="btn btn-success btn-sm">Approve</button>
-                        <button onclick="updateStatus(@app.ApplicationID, 'Rejected')" class="btn btn-danger btn-sm">Reject</button>
-                    }
-                    else
-                    {
-                        <span class="text-muted">@app.Status</span>
-                    }
-                </td>
-            </tr>
-        }
+            @foreach (var app in Model)
+            {
+                <tr id="application-@app.ApplicationID">
+                    <td>@app.ApplicationID</td>
+                    <td>@app.FarmName</td>
+                    <td>@app.Location</td>
+                    <td>@app.FarmType</td>
+                    <td>@app.FullName</td>
+                    <td>@app.Email</td>
+                    <td>@app.Phone</td>
+                    <td>@app.SubmissionDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>
+                        <span
+                            class="badge @(app.Status == "Pending" ? "bg-warning" : (app.Status == "Approved" ? "bg-success" : "bg-danger"))">
+                            @app.Status
+                        </span>
+                    </td>
+                    <td>
+                        @if (app.Status == "Pending")
+                        {
+                            <button onclick="updateStatus(@app.ApplicationID, 'Approved')"
+                                class="btn btn-success btn-sm">Approve</button>
+                            <button onclick="updateStatus(@app.ApplicationID, 'Rejected')"
+                                class="btn btn-danger btn-sm">Reject</button>
+                        }
+                        else
+                        {
+                            <span class="text-muted">@app.Status</span>
+                        }
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
@@ -58,7 +61,7 @@
                 url: '@Url.Action("UpdateStatus", "Employee")',
                 type: 'POST',
                 data: { id: id, status: status },
-                success: function(result) {
+                success: function (result) {
                     if (result.success) {
                         var row = $('#application-' + id);
                         row.find('.badge').removeClass('bg-warning bg-success bg-danger')
@@ -69,7 +72,7 @@
                         alert('Failed to update status: ' + result.message);
                     }
                 },
-                error: function() {
+                error: function () {
                     alert('An error occurred while updating the status.');
                 }
             });

@@ -1,34 +1,45 @@
-using System;
-using System.Collections.Generic;
 using AgriEnergyConnect.Data;
 using AgriEnergyConnect.Models;
-using AgriEnergyConnect.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace AgriEnergyConnect.Repositories;
-
-public class ApplicationRepository : IApplicationRepository
+namespace AgriEnergyConnect.Repositories
 {
-    private readonly AppDbContext _context;
-
-    public ApplicationRepository(AppDbContext context)
+    public class ApplicationRepository : IApplicationRepository
     {
-        _context = context;
-    }
+        private readonly AppDbContext _context;
 
-    public async Task<List<FarmerApplication>> GetAllAsync() =>
-        await _context.FarmerApplications.ToListAsync();
-
-    public async Task<FarmerApplication?> GetByIdAsync(int id) =>
-        await _context.FarmerApplications.FindAsync(id);
-
-    public async Task UpdateStatusAsync(int id, string status)
-    {
-        var app = await _context.FarmerApplications.FindAsync(id);
-        if (app != null)
+        public ApplicationRepository(AppDbContext context)
         {
-            app.Status = status;
-            await _context.SaveChangesAsync();
+            _context = context;
+        }
+
+        public async Task<List<FarmerApplication>> GetAllAsync()
+        {
+            return await _context.FarmerApplications.ToListAsync();
+        }
+
+        public async Task<FarmerApplication?> GetByIdAsync(int id)
+        {
+            return await _context.FarmerApplications.FindAsync(id);
+        }
+
+        public async Task UpdateStatusAsync(int id, string status)
+        {
+            var application = await _context.FarmerApplications.FindAsync(id);
+            if (application != null)
+            {
+                application.Status = status;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<bool> SubmitApplicationAsync(FarmerApplication application)
+        {
+            _context.FarmerApplications.Add(application);
+            var result = await _context.SaveChangesAsync();
+            return result > 0;
         }
     }
 }

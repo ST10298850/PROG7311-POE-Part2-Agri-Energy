@@ -34,19 +34,19 @@
                             <label asp-for="NewProduct.Category" class="form-label"></label>
                             <select asp-for="NewProduct.Category" class="form-select" name="NewProduct.Category">
                                 <option value="">Choose...</option>
-                                <option>Vegetables</option>
-                                <option>Fruits</option>
-                                <option>Dairy</option>
-                                <option>Grains</option>
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <option value="@category">@category</option>
+                                }
                             </select>
                             <span data-valmsg-for="NewProduct.Category" class="text-danger"></span>
                         </div>
-                            <div class="mb-3">
-                                <label asp-for="NewProduct.ProductionDate" class="form-label"></label>
-                                <input asp-for="NewProduct.ProductionDate" type="date" class="form-control"
-                                    name="NewProduct.ProductionDate" id="productionDate" />
-                                <span data-valmsg-for="NewProduct.ProductionDate" class="text-danger"></span>
-                            </div>
+                        <div class="mb-3">
+                            <label asp-for="NewProduct.ProductionDate" class="form-label"></label>
+                            <input asp-for="NewProduct.ProductionDate" type="date" class="form-control"
+                                name="NewProduct.ProductionDate" id="productionDate" />
+                            <span data-valmsg-for="NewProduct.ProductionDate" class="text-danger"></span>
+                        </div>
                         <button type="submit" class="btn btn-primary">Add Product</button>
                     </form>
                 </div>
@@ -87,7 +87,7 @@
 @section Scripts {
     <script>
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('productionDate').value = today;
         });
@@ -103,7 +103,6 @@
                 Category: document.querySelector("[name='NewProduct.Category']").value,
                 ProductionDate: document.querySelector("[name='NewProduct.ProductionDate']").value,
                 Description: document.querySelector("[name='NewProduct.Description']").value || "No Description"
-
             };
 
             const token = document.querySelector("input[name='__RequestVerificationToken']").value;
@@ -121,6 +120,13 @@
                 const result = await response.json();
                 addProductToTable(result.product);
                 document.getElementById("addProductForm").reset();
+
+                // Add the new category to the dropdown if it doesn't exist
+                const categorySelect = document.querySelector("[name='NewProduct.Category']");
+                if (!Array.from(categorySelect.options).some(option => option.value === result.product.category)) {
+                    const newOption = new Option(result.product.category, result.product.category);
+                    categorySelect.add(newOption);
+                }
             } else {
                 const errorData = await response.json();
                 for (const key in errorData.errors) {
@@ -135,12 +141,12 @@
             const row = document.createElement("tr");
             row.setAttribute('data-product-id', product.productID);
             row.innerHTML = `
-                    <td>${product.name}</td>
-                    <td>${product.category}</td>
-                    <td>${new Date(product.productionDate).toLocaleDateString()}</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-danger" onclick="deleteProduct(${product.productID})">Delete</button>
-                    </td>`;
+                            <td>${product.name}</td>
+                            <td>${product.category}</td>
+                            <td>${new Date(product.productionDate).toLocaleDateString()}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteProduct(${product.productID})">Delete</button>
+                            </td>`;
             tableBody.appendChild(row);
         }
 

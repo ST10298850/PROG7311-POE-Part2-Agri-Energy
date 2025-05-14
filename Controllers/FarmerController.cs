@@ -26,9 +26,11 @@ public class FarmerController : Controller
     {
         var farmId = await _farmService.GetFarmIdForUserAsync(User);
         var products = await _productService.GetProductsAsync(farmId);
+        var categories = await _productService.GetDistinctCategoriesAsync();
         var vm = new AddProductViewModel
         {
-            Products = products
+            Products = products,
+            Categories = categories
         };
 
         return View(vm);
@@ -49,24 +51,14 @@ public class FarmerController : Controller
         }
 
         var farmId = await _farmService.GetFarmIdForUserAsync(User);
-        var currentUser = await _userManager.GetUserAsync(User); // Use UserManager here
+        var currentUser = await _userManager.GetUserAsync(User);
 
         if (currentUser == null)
         {
             return Unauthorized();
         }
 
-        var product = new Product
-        {
-            Name = input.Name,
-            Description = string.IsNullOrEmpty(input.Description) ? "No Description" : input.Description,
-            Category = input.Category,
-            ProductionDate = input.ProductionDate,
-            FarmID = farmId,
-            UserId = currentUser.Id // Safer and cleaner
-        };
-
-        await _productService.AddProductAsync(product);
+        var product = await _productService.AddProductAsync(input, farmId, currentUser.Id);
 
         return Ok(new
         {

@@ -1,73 +1,34 @@
 using Microsoft.AspNetCore.Mvc;
 using AgriEnergyConnect.Models;
-using AgriEnergyConnect.Data;
-using Microsoft.EntityFrameworkCore;
 using AgriEnergyConnect.Services;
-using Microsoft.AspNetCore.Identity;
-using AppUser = AgriEnergyConnect.Models.User;
+using System;
+using System.Threading.Tasks;
 
 namespace AgriEnergyConnect.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly AppDbContext _context;
         private readonly IApplicationService _applicationService;
-
         private readonly IProductService _productService;
 
-        private readonly UserManager<AppUser> _userManager;
-
-        public EmployeeController(AppDbContext context, IApplicationService applicationService, IProductService productService, UserManager<AppUser> userManager)
+        public EmployeeController(IApplicationService applicationService, IProductService productService)
         {
-            _context = context;
             _applicationService = applicationService;
             _productService = productService;
-            _userManager = userManager;
         }
 
-        // GET: EmployeeController
         [HttpGet]
         public async Task<IActionResult> Dashboard(string? userId, string? category, DateTime? startDate, DateTime? endDate, bool reset = false)
         {
-            var query = _context.Products
-                .Include(p => p.Farm)
-                .Include(p => p.User)
-                .AsQueryable();
-
             if (reset)
             {
-                // Reset all filter parameters
                 userId = null;
                 category = null;
                 startDate = null;
                 endDate = null;
             }
 
-            if (!string.IsNullOrEmpty(userId))
-                query = query.Where(p => p.UserId == userId);
-
-            if (!string.IsNullOrEmpty(category))
-                query = query.Where(p => p.Category == category);
-
-            if (startDate.HasValue)
-                query = query.Where(p => p.ProductionDate >= startDate.Value);
-
-            if (endDate.HasValue)
-                query = query.Where(p => p.ProductionDate <= endDate.Value);
-
-            var products = await query.ToListAsync();
-
-            var viewModel = new ProductFilterViewModel
-            {
-                Products = products,
-                Categories = await _context.Products.Select(p => p.Category).Distinct().ToListAsync(),
-                Farmers = (await _userManager.GetUsersInRoleAsync("Farmer")).ToList(),
-                UserId = userId,
-                Category = category,
-                StartDate = startDate,
-                EndDate = endDate
-            };
-
+            var viewModel = await _productService.GetFilteredProductsAsync(userId, category, startDate, endDate);
             return View(viewModel);
         }
 
@@ -84,7 +45,7 @@ namespace AgriEnergyConnect.Controllers
             if (!success)
                 return Json(new { success = false, message = "Failed to update status" });
 
-            var updatedApplication = await _context.FarmerApplications.FindAsync(id);
+            var updatedApplication = await _applicationService.GetApplicationByIdAsync(id);
             return Json(new { success = true, message = "Status updated successfully", newStatus = updatedApplication.Status });
         }
 
@@ -93,6 +54,7 @@ namespace AgriEnergyConnect.Controllers
             var products = await _productService.GetAllProductsAsync();
             return View(products);
         }
+
         [HttpGet]
         public IActionResult ResetDashboard()
         {

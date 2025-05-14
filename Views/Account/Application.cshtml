@@ -1,68 +1,74 @@
 ﻿@model AgriEnergyConnect.ViewModels.FarmerApplicationViewModel
 
-<div class="farmer-application-container">
-    <div class="farmer-application-header">
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4ZM31 26H26V31H22V26H17V22H22V17H26V22H31V26Z"
-                fill="#404040" />
-        </svg>
-        <h1>Farmer Application</h1>
-        <p>Join our farming community</p>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center bg-light">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4ZM31 26H26V31H22V26H17V22H22V17H26V22H31V26Z"
+                            fill="#404040" />
+                    </svg>
+                    <h2 class="mt-2">Farmer Application</h2>
+                    <p class="text-muted">Join our farming community</p>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Application" asp-controller="Account" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FarmName" class="form-label">Farm Name</label>
+                                <input asp-for="FarmName" class="form-control" required />
+                                <span asp-validation-for="FarmName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Location" class="form-label">Location</label>
+                                <input asp-for="Location" class="form-control" required />
+                                <span asp-validation-for="Location" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FarmType" class="form-label">Type of Farm</label>
+                                <select asp-for="FarmType" class="form-select" required>
+                                    <option value="">Select Farm Type</option>
+                                    <option value="Crop Farming">Crop Farming</option>
+                                    <option value="Livestock">Livestock</option>
+                                    <option value="Mixed Farming">Mixed Farming</option>
+                                </select>
+                                <span asp-validation-for="FarmType" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FullName" class="form-label">Full Name</label>
+                                <input asp-for="FullName" class="form-control" required />
+                                <span asp-validation-for="FullName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Email" class="form-label">Email Address</label>
+                                <input asp-for="Email" type="email" class="form-control" required />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Phone" class="form-label">Phone Number</label>
+                                <input asp-for="Phone" class="form-control" required />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input asp-for="TermsAccepted" type="checkbox" class="form-check-input" required />
+                            <label asp-for="TermsAccepted" class="form-check-label">I agree to the terms and
+                                conditions</label>
+                            <span asp-validation-for="TermsAccepted" class="text-danger d-block"></span>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit Application</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <form asp-action="Application" asp-controller="Account" method="post">
-        @Html.AntiForgeryToken()
-        <div class="form-columns">
-            <div class="form-column">
-                <div class="form-group">
-                    <label asp-for="FarmName">Farm Name</label>
-                    <input asp-for="FarmName" class="form-control" required />
-                    <span asp-validation-for="FarmName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Location">Location</label>
-                    <input asp-for="Location" class="form-control" required />
-                    <span asp-validation-for="Location" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="FarmType">Type of Farm</label>
-                    <select asp-for="FarmType" class="form-control" required>
-                        <option value="">Select Farm Type</option>
-                        <option value="Crop Farming">Crop Farming</option>
-                        <option value="Livestock">Livestock</option>
-                        <option value="Mixed Farming">Mixed Farming</option>
-                    </select>
-                    <span asp-validation-for="FarmType" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-column">
-                <div class="form-group">
-                    <label asp-for="FullName">Full Name</label>
-                    <input asp-for="FullName" class="form-control" required />
-                    <span asp-validation-for="FullName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Email">Email Address</label>
-                    <input asp-for="Email" type="email" class="form-control" required />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Phone">Phone Number</label>
-                    <input asp-for="Phone" class="form-control" required />
-                    <span asp-validation-for="Phone" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <div class="terms-checkbox">
-            <label>
-                <input asp-for="TermsAccepted" type="checkbox" required /> I agree to the terms and conditions
-            </label>
-            <span asp-validation-for="TermsAccepted" class="text-danger"></span>
-        </div>
-
-        <button type="submit" class="btn-submit">Submit Application</button>
-    </form>
 </div>
 
 @section Scripts {

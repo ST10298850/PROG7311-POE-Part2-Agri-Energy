@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using AgriEnergyConnect.Models;
+using AgriEnergyConnect.ViewModels;
 using Microsoft.AspNetCore.Identity;
 
 namespace AgriEnergyConnect.Services
@@ -30,6 +31,23 @@ namespace AgriEnergyConnect.Services
         public async Task<User?> GetUserByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<(bool success, User? user)> LoginAsync(LoginViewModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return (false, null);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
+            return (result.Succeeded, result.Succeeded ? user : null);
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
         }
     }
 }

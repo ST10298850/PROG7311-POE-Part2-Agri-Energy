@@ -1,13 +1,12 @@
-using System;
 using AgriEnergyConnect.Models;
-using AgriEnergyConnect.Repositories;
-using System.Threading.Tasks;
+using AgriEnergyConnect.ViewModels;
 using System.Collections.Generic;
-
-namespace AgriEnergyConnect.Services;
+using System.Threading.Tasks;
 
 public interface IApplicationService
 {
-    Task<bool> ChangeApplicationStatusAsync(int id, string status);
     Task<List<FarmerApplication>> GetAllApplicationsAsync();
+    Task<bool> ChangeApplicationStatusAsync(int id, string status);
+    Task<FarmerApplication> GetApplicationByIdAsync(int id);
+    Task<bool> SubmitApplicationAsync(FarmerApplicationViewModel model);
 }

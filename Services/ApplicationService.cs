@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using AgriEnergyConnect.Models;
 using AgriEnergyConnect.Repositories;
+using AgriEnergyConnect.ViewModels;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using AgriEnergyConnect.Data;
@@ -77,10 +79,34 @@ namespace AgriEnergyConnect.Services
 
             return true;
         }
-
         public async Task<List<FarmerApplication>> GetAllApplicationsAsync()
         {
             return await _repository.GetAllAsync();
+        }
+
+        public async Task<FarmerApplication> GetApplicationByIdAsync(int id)
+        {
+            return await _repository.GetByIdAsync(id);
+        }
+
+        // Add the missing method
+        public async Task<bool> SubmitApplicationAsync(FarmerApplicationViewModel model)
+        {
+            // Create a new FarmerApplication from the view model
+            var application = new FarmerApplication
+            {
+                FarmName = model.FarmName,
+                Location = model.Location,
+                FarmType = model.FarmType,
+                FullName = model.FullName,
+                Email = model.Email,
+                Phone = model.Phone,
+                Status = "Pending",
+                SubmissionDate = DateTime.Now
+            };
+
+            // Use the repository to submit the application
+            return await _repository.SubmitApplicationAsync(application);
         }
     }
 }

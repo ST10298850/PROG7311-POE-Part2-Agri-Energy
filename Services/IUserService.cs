@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using AgriEnergyConnect.Models;
+using AgriEnergyConnect.ViewModels;
 
 namespace AgriEnergyConnect.Services
 {
@@ -7,7 +8,7 @@ namespace AgriEnergyConnect.Services
     {
         Task<bool> ValidateCredentialsAsync(string email, string password);
         Task<User?> GetUserByEmailAsync(string email);
-
-
+        Task<(bool success, User? user)> LoginAsync(LoginViewModel model);
+        Task LogoutAsync();
     }
 }

@@ -8,6 +8,7 @@ namespace AgriEnergyConnect.ViewModels
     public class AddProductViewModel
     {
         public List<Product> Products { get; set; }
+        public List<string> Categories { get; set; }
 
         public ProductInputModel NewProduct { get; set; } = new ProductInputModel();
     }
