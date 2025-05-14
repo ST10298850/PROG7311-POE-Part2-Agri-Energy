@@ -10,12 +10,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AgriEnergyConnect.Services
 {
+    /// <summary>
+    /// Service class for managing farmer applications.
+    /// </summary>
     public class ApplicationService : IApplicationService
     {
         private readonly IApplicationRepository _repository;
         private readonly UserManager<User> _userManager;
         private readonly AppDbContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the ApplicationService class.
+        /// </summary>
+        /// <param name="repository">The application repository.</param>
+        /// <param name="userManager">The user manager for identity operations.</param>
+        /// <param name="context">The database context.</param>
         public ApplicationService(
             IApplicationRepository repository,
             UserManager<User> userManager,
@@ -26,6 +35,12 @@ namespace AgriEnergyConnect.Services
             _context = context;
         }
 
+        /// <summary>
+        /// Changes the status of a farmer application and performs necessary actions if approved.
+        /// </summary>
+        /// <param name="id">The ID of the application to update.</param>
+        /// <param name="status">The new status to set.</param>
+        /// <returns>True if the status was successfully changed, false otherwise.</returns>
         public async Task<bool> ChangeApplicationStatusAsync(int id, string status)
         {
             var app = await _repository.GetByIdAsync(id);
@@ -79,17 +94,31 @@ namespace AgriEnergyConnect.Services
 
             return true;
         }
+
+        /// <summary>
+        /// Retrieves all farmer applications.
+        /// </summary>
+        /// <returns>A list of all farmer applications.</returns>
         public async Task<List<FarmerApplication>> GetAllApplicationsAsync()
         {
             return await _repository.GetAllAsync();
         }
 
+        /// <summary>
+        /// Retrieves a specific farmer application by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the application to retrieve.</param>
+        /// <returns>The farmer application if found, null otherwise.</returns>
         public async Task<FarmerApplication> GetApplicationByIdAsync(int id)
         {
             return await _repository.GetByIdAsync(id);
         }
 
-        // Add the missing method
+        /// <summary>
+        /// Submits a new farmer application.
+        /// </summary>
+        /// <param name="model">The view model containing the application details.</param>
+        /// <returns>True if the application was successfully submitted, false otherwise.</returns>
         public async Task<bool> SubmitApplicationAsync(FarmerApplicationViewModel model)
         {
             // Create a new FarmerApplication from the view model

@@ -259,3 +259,8 @@ async Task SeedDatabase(IServiceProvider serviceProvider)
         throw;
     }
 }
+
+//Use this to swap to my own database
+//"ConnectionStrings": {
+//  "DefaultConnection": "Server=localhost,1433;Database=AgriEnergyConnectDB;User Id=sa;Password=AgriStrong123!;TrustServerCertificate=True;"
+// },

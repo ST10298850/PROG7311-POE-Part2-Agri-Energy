@@ -5,12 +5,18 @@ using AgriEnergyConnect.Models;
 using Microsoft.AspNetCore.Identity;
 using AppUser = AgriEnergyConnect.Models.User;
 
+/// <summary>
+/// Controller responsible for handling farmer-related actions and views.
+/// </summary>
 public class FarmerController : Controller
 {
     private readonly IProductService _productService;
     private readonly IFarmService _farmService;
     private readonly UserManager<AppUser> _userManager;
 
+    /// <summary>
+    /// Initializes a new instance of the FarmerController.
+    /// </summary>
     public FarmerController(
         IProductService productService,
         IFarmService farmService,
@@ -21,6 +27,9 @@ public class FarmerController : Controller
         _userManager = userManager;
     }
 
+    /// <summary>
+    /// Displays the farmer dashboard with products and categories.
+    /// </summary>
     [HttpGet]
     public async Task<IActionResult> Dashboard()
     {
@@ -36,6 +45,9 @@ public class FarmerController : Controller
         return View(vm);
     }
 
+    /// <summary>
+    /// Adds a new product for the farmer.
+    /// </summary>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddProduct([FromBody] ProductInputModel input)
@@ -72,6 +84,9 @@ public class FarmerController : Controller
         });
     }
 
+    /// <summary>
+    /// Deletes a product for the farmer.
+    /// </summary>
     [HttpDelete]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteProduct(int id)
@@ -89,4 +104,3 @@ public class FarmerController : Controller
         }
     }
 }
-
