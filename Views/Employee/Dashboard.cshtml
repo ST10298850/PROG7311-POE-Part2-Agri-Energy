@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Employee Dashboard";
+    Layout = "_Layout";
 }
 
 <div class="container mt-4">
@@ -43,6 +44,10 @@
         </div>
         <div class="col-12 text-end mt-2">
             <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+        <div class="col-12 text-end mt-2">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a asp-action="Dashboard" asp-route-reset="true" class="btn btn-secondary">Reset</a>
         </div>
     </form>
 

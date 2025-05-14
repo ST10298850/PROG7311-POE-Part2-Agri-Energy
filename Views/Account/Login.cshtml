@@ -29,6 +29,12 @@
                 <h1>Welcome Back</h1>
                 <p>Login to your account</p>
             </div>
+            @if (ViewData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @ViewData["ErrorMessage"]
+                </div>
+            }
             <form asp-controller="Account" asp-action="Login" method="post">
                 <div class="form-group">
                     <label asp-for="Email">Email address</label>
@@ -41,9 +47,6 @@
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="form-options">
-                    <label>
-                        <input type="checkbox" name="remember"> Remember me
-                    </label>
                     <a href="#" class="forgot-password">Forgot password?</a>
                 </div>
                 <button type="submit" class="btn-signin">Sign in</button>

@@ -27,12 +27,21 @@ namespace AgriEnergyConnect.Controllers
 
         // GET: EmployeeController
         [HttpGet]
-        public async Task<IActionResult> Dashboard(string? userId, string? category, DateTime? startDate, DateTime? endDate)
+        public async Task<IActionResult> Dashboard(string? userId, string? category, DateTime? startDate, DateTime? endDate, bool reset = false)
         {
             var query = _context.Products
                 .Include(p => p.Farm)
                 .Include(p => p.User)
                 .AsQueryable();
+
+            if (reset)
+            {
+                // Reset all filter parameters
+                userId = null;
+                category = null;
+                startDate = null;
+                endDate = null;
+            }
 
             if (!string.IsNullOrEmpty(userId))
                 query = query.Where(p => p.UserId == userId);
@@ -83,6 +92,11 @@ namespace AgriEnergyConnect.Controllers
         {
             var products = await _productService.GetAllProductsAsync();
             return View(products);
+        }
+        [HttpGet]
+        public IActionResult ResetDashboard()
+        {
+            return RedirectToAction("Dashboard");
         }
     }
 }

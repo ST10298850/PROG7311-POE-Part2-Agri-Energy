@@ -7,5 +7,7 @@ namespace AgriEnergyConnect.Services
     {
         Task<bool> ValidateCredentialsAsync(string email, string password);
         Task<User?> GetUserByEmailAsync(string email);
+
+
     }
 }

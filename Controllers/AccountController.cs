@@ -3,8 +3,10 @@ using AgriEnergyConnect.Models;
 using AgriEnergyConnect.ViewModels;
 using AgriEnergyConnect.Services;
 using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
 using AgriEnergyConnect.Data;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Threading.Tasks;
 
 namespace AgriEnergyConnect.Controllers
 {
@@ -12,7 +14,6 @@ namespace AgriEnergyConnect.Controllers
     {
         private readonly IUserService _userService;
         private readonly SignInManager<User> _signInManager;
-
         private readonly AppDbContext _context;
 
         public AccountController(IUserService userService, SignInManager<User> signInManager, AppDbContext context)
@@ -21,19 +22,21 @@ namespace AgriEnergyConnect.Controllers
             _signInManager = signInManager;
             _context = context;
         }
+
         /// <summary>
-        /// Displays the login page for user authentication.
+        /// Displays the login page.
         /// </summary>
-        /// <returns>
-        /// Returns an IActionResult that renders the login view.
-        /// </returns>
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
-        // POST: /Account/Login
+        /// <summary>
+        /// Processes login credentials and redirects based on user role.
+        /// </summary>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -42,10 +45,9 @@ namespace AgriEnergyConnect.Controllers
             if (await _userService.ValidateCredentialsAsync(model.Email!, model.Password!))
             {
                 var user = await _userService.GetUserByEmailAsync(model.Email!);
-
                 if (user != null)
                 {
-                    // Store session
+                    // Store session details
                     HttpContext.Session.SetString("UserID", user.Id);
                     HttpContext.Session.SetString("Email", user.Email);
                     HttpContext.Session.SetString("Role", user.Role);
@@ -56,33 +58,39 @@ namespace AgriEnergyConnect.Controllers
                 }
             }
 
-            ModelState.AddModelError("", "Invalid email or password.");
+            ViewData["ErrorMessage"] = "Invalid login credentials";
             return View(model);
         }
 
-        // GET: /Account/Logout
-        // public async Task<IActionResult> Logout()
-        // {
-        //     await _signInManager.SignOutAsync();
-        //     HttpContext.Session.Clear();
-        //     return RedirectToAction("Login");
-        // }
+        /// <summary>
+        /// Logs the user out and clears the session.
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "Account");
+        }
 
-        // GET: /Account/Application
+        /// <summary>
+        /// Displays the farmer application form.
+        /// </summary>
+        [HttpGet]
         public IActionResult Application()
         {
             return View();
         }
 
-        // POST: /Account/Application
+        /// <summary>
+        /// Submits a new farmer application.
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Application(FarmerApplicationViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
-
-            // var userId = HttpContext.Session.GetString("UserID");
 
             var application = new FarmerApplication
             {
@@ -93,28 +101,22 @@ namespace AgriEnergyConnect.Controllers
                 Email = model.Email,
                 Phone = model.Phone,
                 SubmissionDate = DateTime.Now,
-                Status = "Pending",
-
+                Status = "Pending"
             };
 
             _context.FarmerApplications.Add(application);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Login", "Account"); // Redirect to login page
+            return RedirectToAction("ApplicationSuccess", "Account");
         }
 
-        // GET: /Account/ApplicationSuccess
+        /// <summary>
+        /// Displays the application success confirmation.
+        /// </summary>
+        [HttpGet]
         public IActionResult ApplicationSuccess()
         {
             return View();
-        }
-
-        // GET: /Account/Logout
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();         // ASP.NET Identity logout
-            HttpContext.Session.Clear();                 // Clear session variables
-            return RedirectToAction("Login", "Account"); // Redirect to login page
         }
     }
 }

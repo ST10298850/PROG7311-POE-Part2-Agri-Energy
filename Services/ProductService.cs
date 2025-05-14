@@ -19,4 +19,8 @@ public class ProductService : IProductService
 
     public Task<List<Product>> GetAllProductsAsync() =>
         _repo.GetAllProductsAsync();
+    public async Task<bool> DeleteProductAsync(int productId, int farmId)
+    {
+        return await _repo.DeleteProductAsync(productId, farmId);
+    }
 }

@@ -79,5 +79,22 @@ public class FarmerController : Controller
             }
         });
     }
+
+    [HttpDelete]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
+        var farmId = await _farmService.GetFarmIdForUserAsync(User);
+        var result = await _productService.DeleteProductAsync(id, farmId);
+
+        if (result)
+        {
+            return Ok();
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
 }
 
