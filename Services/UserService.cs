@@ -2,6 +2,8 @@ using System.Threading.Tasks;
 using AgriEnergyConnect.Models;
 using AgriEnergyConnect.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using AgriEnergyConnect.Data;
+
 
 namespace AgriEnergyConnect.Services
 {
@@ -12,18 +14,20 @@ namespace AgriEnergyConnect.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly AppDbContext _context;
+        private readonly ILogger<UserService> _logger;
 
-        /// <summary>
-        /// Initializes a new instance of the UserService class.
-        /// </summary>
-        /// <param name="userManager">The user manager for identity operations.</param>
-        /// <param name="signInManager">The sign-in manager for authentication operations.</param>
-        public UserService(UserManager<User> userManager, SignInManager<User> signInManager)
+        public UserService(
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            AppDbContext context,
+            ILogger<UserService> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
+            _logger = logger;
         }
-
         /// <summary>
         /// Validates user credentials.
         /// </summary>
@@ -75,6 +79,60 @@ namespace AgriEnergyConnect.Services
         public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task<IdentityResult> CreateUserAsync(CreateUserViewModel model)
+        {
+            var user = new User
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                Role = "Farmer" // Explicitly set the Role to "Farmer"
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                try
+                {
+                    // Add the user to the "Farmer" role
+                    await _userManager.AddToRoleAsync(user, "Farmer");
+
+                    var userDetail = new UserDetail
+                    {
+                        UserID = user.Id,
+                        FullName = model.FullName,
+                        Phone = model.Phone,
+                        Address = model.Location // Assuming Location is the address
+                    };
+                    _context.UserDetails.Add(userDetail);
+
+                    var farm = new Farm
+                    {
+                        UserID = user.Id,
+                        FarmName = model.FarmName,
+                        Location = model.Location,
+                        FarmType = model.FarmType
+                    };
+                    _context.Farms.Add(farm);
+
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation($"User created successfully: {user.Email}");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error creating user: {ex.Message}");
+                    // If an error occurs after user creation, delete the user
+                    await _userManager.DeleteAsync(user);
+                    return IdentityResult.Failed(new IdentityError { Description = "Error occurred while saving user details." });
+                }
+            }
+            else
+            {
+                _logger.LogWarning($"Failed to create user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            }
+
+            return result;
         }
     }
 }

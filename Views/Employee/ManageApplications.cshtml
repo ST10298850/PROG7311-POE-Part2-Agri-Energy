@@ -2,56 +2,65 @@
 
 <div class="container mt-4">
     <h1 class="mb-4">Manage Farmer Applications</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Application ID</th>
-                <th>Farm Name</th>
-                <th>Location</th>
-                <th>Farm Type</th>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Submission Date</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var app in Model)
-            {
-                <tr id="application-@app.ApplicationID">
-                    <td>@app.ApplicationID</td>
-                    <td>@app.FarmName</td>
-                    <td>@app.Location</td>
-                    <td>@app.FarmType</td>
-                    <td>@app.FullName</td>
-                    <td>@app.Email</td>
-                    <td>@app.Phone</td>
-                    <td>@app.SubmissionDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                    <td>
-                        <span
-                            class="badge @(app.Status == "Pending" ? "bg-warning" : (app.Status == "Approved" ? "bg-success" : "bg-danger"))">
-                            @app.Status
-                        </span>
-                    </td>
-                    <td>
-                        @if (app.Status == "Pending")
-                        {
-                            <button onclick="updateStatus(@app.ApplicationID, 'Approved')"
-                                class="btn btn-success btn-sm">Approve</button>
-                            <button onclick="updateStatus(@app.ApplicationID, 'Rejected')"
-                                class="btn btn-danger btn-sm">Reject</button>
-                        }
-                        else
-                        {
-                            <span class="text-muted">@app.Status</span>
-                        }
-                    </td>
+    <a asp-action="CreateUser" class="btn btn-primary mb-3">Create New User</a>
+
+    @if (Model == null || !Model.Any())
+    {
+        <p>No applications found.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Application ID</th>
+                    <th>Farm Name</th>
+                    <th>Location</th>
+                    <th>Farm Type</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Submission Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var app in Model)
+                {
+                    <tr id="application-@app.ApplicationID">
+                        <td>@app.ApplicationID</td>
+                        <td>@app.FarmName</td>
+                        <td>@app.Location</td>
+                        <td>@app.FarmType</td>
+                        <td>@app.FullName</td>
+                        <td>@app.Email</td>
+                        <td>@app.Phone</td>
+                        <td>@app.SubmissionDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        <td>
+                            <span
+                                class="badge @(app.Status == "Pending" ? "bg-warning" : (app.Status == "Approved" ? "bg-success" : "bg-danger"))">
+                                @app.Status
+                            </span>
+                        </td>
+                        <td>
+                            @if (app.Status == "Pending")
+                            {
+                                <button onclick="updateStatus(@app.ApplicationID, 'Approved')"
+                                    class="btn btn-success btn-sm">Approve</button>
+                                <button onclick="updateStatus(@app.ApplicationID, 'Rejected')"
+                                    class="btn btn-danger btn-sm">Reject</button>
+                            }
+                            else
+                            {
+                                <span class="text-muted">@app.Status</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
 
 @section Scripts {

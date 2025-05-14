@@ -30,6 +30,7 @@ builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IFarmService, FarmService>();
+builder.Services.AddLogging();
 
 var app = builder.Build();
 
@@ -263,4 +264,8 @@ async Task SeedDatabase(IServiceProvider serviceProvider)
 //Use this to swap to my own database
 //"ConnectionStrings": {
 //  "DefaultConnection": "Server=localhost,1433;Database=AgriEnergyConnectDB;User Id=sa;Password=AgriStrong123!;TrustServerCertificate=True;"
+// },
+
+// "ConnectionStrings": {
+//   "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=AgriEnergyConnectDb;Trusted_Connection=True;MultipleActiveResultSets=true"
 // },

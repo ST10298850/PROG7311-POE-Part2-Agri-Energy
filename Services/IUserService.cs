@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using AgriEnergyConnect.Models;
 using AgriEnergyConnect.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace AgriEnergyConnect.Services
 {
@@ -10,5 +11,6 @@ namespace AgriEnergyConnect.Services
         Task<User?> GetUserByEmailAsync(string email);
         Task<(bool success, User? user)> LoginAsync(LoginViewModel model);
         Task LogoutAsync();
+        Task<IdentityResult> CreateUserAsync(CreateUserViewModel model);
     }
 }

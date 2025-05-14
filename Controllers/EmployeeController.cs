@@ -3,6 +3,8 @@ using AgriEnergyConnect.Models;
 using AgriEnergyConnect.Services;
 using System;
 using System.Threading.Tasks;
+using AgriEnergyConnect.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace AgriEnergyConnect.Controllers
 {
@@ -13,14 +15,19 @@ namespace AgriEnergyConnect.Controllers
     {
         private readonly IApplicationService _applicationService;
         private readonly IProductService _productService;
+        private readonly IUserService _userService;
+        private readonly ILogger<EmployeeController> _logger;
 
-        /// <summary>
-        /// Initializes a new instance of the EmployeeController with required services.
-        /// </summary>
-        public EmployeeController(IApplicationService applicationService, IProductService productService)
+        public EmployeeController(
+            IApplicationService applicationService,
+            IProductService productService,
+            IUserService userService,
+            ILogger<EmployeeController> logger)
         {
             _applicationService = applicationService;
             _productService = productService;
+            _userService = userService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -80,6 +87,41 @@ namespace AgriEnergyConnect.Controllers
         public IActionResult ResetDashboard()
         {
             return RedirectToAction("Dashboard");
+        }
+        [HttpGet]
+        public IActionResult CreateUser()
+        {
+            TempData.Remove("ErrorMessage");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUser(CreateUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _userService.CreateUserAsync(model);
+                if (result.Succeeded)
+                {
+                    TempData["SuccessMessage"] = "User created successfully.";
+                    _logger.LogInformation($"User created successfully: {model.Email}");
+                    return RedirectToAction(nameof(ManageApplications));
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                    _logger.LogWarning($"Error creating user: {error.Description}");
+                }
+            }
+            else
+            {
+                _logger.LogWarning($"Invalid model state: {string.Join(", ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))}");
+            }
+
+            // If we got this far, something failed; redisplay form
+            TempData["ErrorMessage"] = "Failed to create user. Please check the form and try again.";
+            return View(model);
         }
     }
 }
